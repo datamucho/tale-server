@@ -34,9 +34,7 @@ class serviceFactory<T extends Document> {
 
     res.status(200).json({
       status: "success",
-      data: {
-        data: doc,
-      },
+      data: doc,
     });
   });
 
@@ -49,9 +47,7 @@ class serviceFactory<T extends Document> {
 
     res.status(201).json({
       status: "success",
-      data: {
-        data: doc,
-      },
+      data: doc,
     });
   });
 
@@ -65,9 +61,7 @@ class serviceFactory<T extends Document> {
 
     res.status(200).json({
       status: "success",
-      data: {
-        data: doc,
-      },
+      data: doc,
     });
   });
 
@@ -79,9 +73,7 @@ class serviceFactory<T extends Document> {
     res.status(200).json({
       status: "success",
       results: doc.length,
-      data: {
-        data: doc,
-      },
+      data: doc,
     });
   });
 }

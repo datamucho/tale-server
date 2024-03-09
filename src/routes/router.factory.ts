@@ -11,16 +11,16 @@ class routerFactory {
   router: express.Router;
   service: serviceFactory<Document>;
 
-  constructor(service: serviceFactory<Document>, options: routeOptions) {
+  constructor(service: serviceFactory<Document>, options?: routeOptions) {
     this.router = express.Router();
     this.service = service;
     this.router.use(protect);
-    if (options.restrictGet) {
+    if (options?.restrictGet) {
       this.router.use(restrictTo("admin"));
     }
     this.router.get("/", service.getAll);
     this.router.get("/:id", service.getOne);
-    if (options.restrictPost) {
+    if (options?.restrictPost) {
       this.router.use(restrictTo("admin"));
     }
     this.router.post("/", service.createOne);

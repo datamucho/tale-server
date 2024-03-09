@@ -11,6 +11,9 @@ import AppError from "./utils/appError.js";
 import getEnv from "./utils/env.js";
 import bookModule from "./modules/book.module.js";
 import userRouter from "./routes/user.router.js";
+import boxRouter from "./routes/box.router.js";
+
+import path from "path";
 
 const app = express();
 
@@ -45,10 +48,17 @@ app.use(
   })
 );
 
-// 3) ROUTES
+app.use("/audio", express.static(path.join(__dirname, "audio")));
 
+app.get("/audio/:audioName", (req, res) => {
+  const audioName = req.params.audioName;
+  res.sendFile(path.join(__dirname, "audio", audioName));
+});
+
+// 3) ROUTES
 app.use("/books", bookModule.getRouter());
 app.use("/users", userRouter);
+app.use("/box", boxRouter);
 
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));

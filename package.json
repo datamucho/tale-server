@@ -4,11 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc && npm run copy-assets",
-    "copy-assets": "cp -r src/assets dist/assets",
+    "copy-assets": "cp -r ./audio dist/audio",
     "start": "node dist/server.js",
-    "dev": "nodemon --watch 'src/**/*.ts' --exec 'tsc && node dist/server.js'",
     "st": "npm run build && npm run start"
   },
   "author": "",

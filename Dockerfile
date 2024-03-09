@@ -10,17 +10,21 @@ COPY package*.json ./
 # Install dependencies
 RUN npm install
 
-# If you are building your code for production
-# RUN npm ci --only=production
-
-# Bundle your app source inside the Docker image
+# Copy your app source inside the Docker image
 COPY . .
+
+# Since the audio directory is outside of src and not included in the dist build,
+# copy it explicitly to where it should be accessible according to your server setup.
+# If your Express app expects it to be under /app/audio, you're doing it right here.
+# Adjust if necessary based on your actual path requirements.
 
 # Compile TypeScript to JavaScript
 RUN npm run build
 
-# Your app binds to port 3000 so you'll use the EXPOSE instruction to have it mapped by the docker daemon
-EXPOSE 3000
+COPY audio /app/dist/audio
+
+# Your app binds to port 8080 so you'll use the EXPOSE instruction to have it mapped by the docker daemon
+EXPOSE 8080
 
 # Define the command to run your app using CMD which defines your runtime
-CMD [ "node", "dist/index.js" ]
+CMD ["node", "dist/server.js"]

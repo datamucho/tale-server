@@ -11,7 +11,6 @@ const bookSchema = new Schema<IBook>({
     type: String,
     required: [true, "Please provide your audio"],
     unique: true,
-    validate: [validator.isURL, "Please provide a valid audio"],
   },
   photo: {
     type: String,
