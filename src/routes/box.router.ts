@@ -12,6 +12,6 @@ router.get("/:id", controller.getOne);
 router.patch("/pause/:id", controller.pauseBook);
 router.get("/audio/:id", controller.getAudio);
 router.get("/listen/:id", controller.listenBox);
-router.get("/light/:id", controller.toggleLight);
+router.post("/light/:id", controller.toggleLight);
 
 export default router;
