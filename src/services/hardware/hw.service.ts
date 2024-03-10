@@ -36,11 +36,13 @@ class boxService extends serviceFactory<Document> {
       return next(new AppError("No box found with that ID", 404));
     }
 
-    if (box.bookId) {
-      return next(new AppError("This box is already playing a book", 400));
+    const book = await Book.findById(req.params.bookId);
+
+    if (!book) {
+      return next(new AppError("No book found with that ID", 404));
     }
 
-    box.bookId = req.params.bookId;
+    box.bookId = book._id as any;
     box.paused = false;
     await box.save();
 
