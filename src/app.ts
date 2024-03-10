@@ -6,6 +6,7 @@ import mongoSanitize from "express-mongo-sanitize";
 import hpp from "hpp";
 import cookieParser from "cookie-parser";
 import globalErrorHandler from "./services/error.controller.js";
+import fs from "fs";
 
 import AppError from "./utils/appError.js";
 import getEnv from "./utils/env.js";
@@ -53,6 +54,28 @@ app.use("/audio", express.static(path.join(__dirname, "audio")));
 app.get("/audio/:audioName", (req, res) => {
   const audioName = req.params.audioName;
   res.sendFile(path.join(__dirname, "audio", audioName));
+});
+
+const audioDirectory = path.join(__dirname, "audio");
+
+app.get("/request-audio/:audioName", (req, res) => {
+  const audioName = req.params.audioName;
+  const audioFilePath = path.join(audioDirectory, audioName);
+
+  if (!fs.existsSync(audioFilePath)) {
+    return res.status(404).send("Audio file not found");
+  }
+
+  const audioStream = fs.createReadStream(audioFilePath);
+
+  res.setHeader("Content-Type", "audio/mp3");
+
+  audioStream.pipe(res);
+
+  audioStream.on("error", (err) => {
+    console.error("Error streaming audio:", err);
+    res.status(500).send("Internal Server Error");
+  });
 });
 
 // 3) ROUTES
