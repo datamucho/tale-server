@@ -123,6 +123,22 @@ class boxService extends serviceFactory<Document> {
       data: audio,
     });
   });
+
+  toggleLight = catchAsync(async (req: any, res: any, next: any) => {
+    const box = await Box.findById(req.params.id);
+
+    if (!box) {
+      return next(new AppError("No box found with that ID", 404));
+    }
+
+    box.isLightOn = !box.isLightOn;
+    await box.save();
+
+    res.status(200).json({
+      status: "success",
+      data: box,
+    });
+  });
 }
 
 export default boxService;
