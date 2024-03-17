@@ -115,8 +115,12 @@ class boxService extends serviceFactory<Document> {
       return next(new AppError("No book found with that ID", 404));
     }
 
+    const protocol = req.protocol.endsWith("s")
+      ? req.protocol
+      : `${req.protocol}s`;
+
     const audio =
-      req.protocol + "://" + req.get("host") + "/request-audio/" + book.audio;
+      protocol + "://" + req.get("host") + "/request-audio/" + book.audio;
 
     const volume = box.volume;
 
