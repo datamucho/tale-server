@@ -115,9 +115,8 @@ class boxService extends serviceFactory<Document> {
       return next(new AppError("No book found with that ID", 404));
     }
 
-    // const audio =
-    //   req.protocol + "://" + req.get("host") + "/request-audio/" + book.audio;
-    const audio = "http://stream.srg-ssr.ch/m/rsj/mp3_128";
+    const audio =
+      req.protocol + "://" + req.get("host") + "/request-audio/" + book.audio;
 
     const volume = box.volume;
 
