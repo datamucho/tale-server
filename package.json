@@ -28,6 +28,7 @@
     "node-fetch": "^3.3.2",
     "nodemailer": "^6.9.10",
     "validator": "^13.11.0",
+    "ws": "^8.16.0",
     "xss-clean": "^0.1.4"
   },
   "devDependencies": {
@@ -39,6 +40,7 @@
     "@types/morgan": "^1.9.9",
     "@types/nodemailer": "^6.4.14",
     "@types/validator": "^13.11.9",
+    "@types/ws": "^8.5.10",
     "typescript": "^5.3.3"
   }
 }

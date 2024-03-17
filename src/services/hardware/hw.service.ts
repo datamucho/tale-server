@@ -1,5 +1,6 @@
 import Book from "../../models/book.model";
 import Box from "../../models/hardware.model";
+import { setAudioName } from "../../state";
 
 // const registerBox = catchAsync(async (req: any, res: any, next: any) => {
 //   console.log({ first: "first" });
@@ -118,6 +119,8 @@ class boxService extends serviceFactory<Document> {
     const protocol = req.protocol.endsWith("s")
       ? req.protocol
       : `${req.protocol}s`;
+
+    setAudioName(book.audio);
 
     const audio =
       protocol + "://" + req.get("host") + "/request-audio/" + book.audio;
