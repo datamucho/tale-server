@@ -20,6 +20,10 @@ const BoxSchema = new Schema<IBox>({
     type: Boolean,
     default: false,
   },
+  volume: {
+    type: Number,
+    default: 1,
+  },
 });
 
 const Box = mongoose.model<IBox>("Box", BoxSchema);

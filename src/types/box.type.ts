@@ -6,6 +6,7 @@ interface IBox {
   bookId: mongoose.Schema.Types.ObjectId;
   isLightOn: boolean;
   paused: boolean;
+  volume: number;
 }
 
 export type { IBox };
