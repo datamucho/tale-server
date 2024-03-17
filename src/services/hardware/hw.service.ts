@@ -116,7 +116,7 @@ class boxService extends serviceFactory<Document> {
     }
 
     const audio =
-      req.protocol + "://" + req.get("host") + "/audio/" + book.audio;
+      req.protocol + "://" + req.get("host") + "/request-audio/" + book.audio;
 
     const volume = box.volume;
 
