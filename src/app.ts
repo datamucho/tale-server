@@ -91,7 +91,11 @@ app.get("/radio-audio/:audioName", (req, res) => {
     const start = parseInt(parts[0], 10);
     const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
     const chunksize = end - start + 1;
-    const file = fs.createReadStream(audioFilePath, { start, end });
+    const file = fs.createReadStream(audioFilePath, {
+      start,
+      end,
+      highWaterMark: 8 * 1024,
+    });
     const head = {
       "Content-Range": `bytes ${start}-${end}/${fileSize}`,
       "Accept-Ranges": "bytes",
@@ -136,7 +140,9 @@ wss.on("connection", (ws: any) => {
       return;
     }
 
-    const audioStream = fs.createReadStream(audioFilePath);
+    const audioStream = fs.createReadStream(audioFilePath, {
+      highWaterMark: 8 * 1024,
+    });
     audioStream.on("data", (chunk) => {
       ws.send(chunk, { binary: true });
     });
