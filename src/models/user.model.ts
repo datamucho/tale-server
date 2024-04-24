@@ -3,6 +3,7 @@ import mongoose, { Schema, Query } from "mongoose";
 import validator from "validator";
 import bcrypt from "bcryptjs";
 import { IUser } from "../types";
+import Book from "./book.model";
 
 const userSchema = new Schema<IUser>({
   name: {
@@ -38,6 +39,7 @@ const userSchema = new Schema<IUser>({
       message: "Passwords are not the same!",
     },
   },
+  books: [{ type: Schema.Types.ObjectId, ref: "Book" }],
   passwordChangedAt: Date,
   passwordResetToken: String,
   passwordResetExpires: Date,

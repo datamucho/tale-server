@@ -11,9 +11,9 @@ import http from "http";
 
 import AppError from "./utils/appError.js";
 import getEnv from "./utils/env.js";
-import bookModule from "./modules/book.module.js";
 import userRouter from "./routes/user.router.js";
 import boxRouter from "./routes/box.router.js";
+import bookRouter from "./routes/book.router.js";
 import { Server as WebSocketServer } from "ws";
 import { audioName as globalAudioName } from "./state.js";
 import path from "path";
@@ -115,7 +115,7 @@ app.get("/radio-audio/:audioName", (req, res) => {
 });
 
 // 3) ROUTES
-app.use("/books", bookModule.getRouter());
+app.use("/books", bookRouter);
 app.use("/users", userRouter);
 app.use("/box", boxRouter);
 

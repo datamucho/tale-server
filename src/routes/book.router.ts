@@ -1,5 +1,15 @@
 import bookService from "../services/mobile/book.service";
 import routerFactory from "./router.factory";
 
-const router = new routerFactory(bookService).router;
-export default router;
+class bookRouter extends routerFactory {
+  constructor() {
+    super(bookService);
+    this.router.post(
+      "/mine",
+      this.service.uploadBook(),
+      this.service.uploadAuthorBook
+    );
+  }
+}
+
+export default new bookRouter().router;

@@ -9,7 +9,7 @@ interface routeOptions {
 
 class routerFactory {
   router: express.Router;
-  service: serviceFactory<Document>;
+  service: any | serviceFactory<Document>;
 
   constructor(service: serviceFactory<Document>, options?: routeOptions) {
     this.router = express.Router();

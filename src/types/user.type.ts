@@ -9,6 +9,7 @@ interface IUser {
   passwordResetToken?: string;
   passwordResetExpires?: Date;
   active?: boolean;
+  books: string[];
 
   isModified(field: string): boolean;
   correctPassword(
