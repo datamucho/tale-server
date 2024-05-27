@@ -5,6 +5,10 @@ import multer, { Multer, StorageEngine, Field } from "multer";
 import AppError from "../../utils/appError";
 import User from "../../models/user.model";
 import catchAsync from "../../utils/catchAsync";
+import { getBogAccessToken, initiateBogPay } from "../../bog";
+import { initiateBogPayResponse } from "../../types/bog.types";
+import { successPage } from "../../pages";
+import { errorPage } from "../../pages/error.page";
 
 const fileFilter = (req: Request, file: any, cb: any) => {
   if (file.mimetype === "audio/mp3" || file.mimetype === "audio/mpeg") {
@@ -70,6 +74,82 @@ class bookService extends serviceFactory<Document> {
       res.status(200).json({ data: book });
     }
   );
+
+  buyBook = catchAsync(async (req: any, res: Response, next: NextFunction) => {
+    const bogToken = await getBogAccessToken();
+
+    if (!bogToken) {
+      return next(new AppError("Error occured, while getting token!", 404));
+    }
+
+    const book = await this.model.findById(req.params.id);
+
+    if (!book) {
+      return next(new AppError("No document found with that ID", 404));
+    }
+
+    const successUrl = `${req.protocol}://${req.get(
+      "host"
+    )}/books/payment/success`;
+    const errorUrl = `${req.protocol}://${req.get("host")}/books/payment/error`;
+
+    const callback = `${req.protocol}://${req.get(
+      "host"
+    )}/books/payment/callback/${book._id}/${req.user.id}`;
+    console.log({ callback });
+
+    const proccedToPayment = await initiateBogPay(
+      bogToken,
+      book._id,
+      req.user.id,
+      book.price,
+      successUrl,
+      errorUrl,
+      callback
+    );
+
+    if (!proccedToPayment) {
+      return next(
+        new AppError("Error occured, while proceeding to payment!", 404)
+      );
+    }
+
+    console.log(proccedToPayment);
+
+    return res.status(200).json({ data: proccedToPayment });
+  });
+
+  handlePaymentCallback = catchAsync(
+    async (req: any, res: Response, next: NextFunction) => {
+      const book = await this.model.findById(req.params.bookId);
+      console.log("cb");
+
+      if (!book) {
+        return next(new AppError("No document found with that ID", 404));
+      }
+
+      const user = await User.findById(req.params.userId);
+
+      if (!user) {
+        return next(new AppError("No user found with that ID", 404));
+      }
+
+      user.books.push(book._id);
+
+      await user.save({ validateBeforeSave: false });
+      console.log("200 cb");
+
+      res.status(200).send({ success: true });
+    }
+  );
+
+  handlePaymentError = (req: Request, res: Response, next: NextFunction) => {
+    res.send(errorPage);
+  };
+
+  handlePaymentSuccess = (req: Request, res: Response, next: NextFunction) => {
+    res.send(successPage);
+  };
 }
 
 export default new bookService();

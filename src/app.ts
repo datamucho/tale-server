@@ -7,7 +7,7 @@ import hpp from "hpp";
 import cookieParser from "cookie-parser";
 import globalErrorHandler from "./services/error.controller.js";
 import fs from "fs";
-import http from "http";
+import https from "https";
 
 import AppError from "./utils/appError.js";
 import getEnv from "./utils/env.js";
@@ -17,6 +17,7 @@ import bookRouter from "./routes/book.router.js";
 import { Server as WebSocketServer } from "ws";
 import { audioName as globalAudioName } from "./state.js";
 import path from "path";
+import { getBogAccessToken } from "./bog/getBogAccessToken.js";
 
 const app = express();
 // Set security HTTP headers
@@ -125,8 +126,15 @@ app.all("*", (req, res, next) => {
 
 app.use(globalErrorHandler);
 
-const server = http.createServer(app);
+const server = https.createServer(
+  {
+    key: fs.readFileSync(path.resolve(__dirname, "ssl/key.pem")),
+    cert: fs.readFileSync(path.resolve(__dirname, "ssl/cert.pem")),
+  },
+  app
+);
 
+// getBogAccessToken().then((token) => console.log(token));
 const wss = new WebSocketServer({ server, path: "/ws" });
 
 wss.on("connection", (ws: any) => {

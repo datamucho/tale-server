@@ -5,6 +5,7 @@ import { protect, restrictTo } from "../services/mobile/auth.service";
 interface routeOptions {
   restrictGet?: boolean;
   restrictPost?: boolean;
+  protectAll?: boolean;
 }
 
 class routerFactory {
@@ -14,18 +15,18 @@ class routerFactory {
   constructor(service: serviceFactory<Document>, options?: routeOptions) {
     this.router = express.Router();
     this.service = service;
-    this.router.use(protect);
+    options?.protectAll && this.router.use(protect);
     if (options?.restrictGet) {
       this.router.use(restrictTo("admin"));
     }
-    this.router.get("/", service.getAll);
-    this.router.get("/:id", service.getOne);
+    this.router.get("/", protect, service.getAll);
+    this.router.get("/:id", protect, service.getOne);
     if (options?.restrictPost) {
       this.router.use(restrictTo("admin"));
     }
-    this.router.post("/", service.createOne);
-    this.router.patch("/:id", service.updateOne);
-    this.router.delete("/:id", service.deleteOne);
+    this.router.post("/", protect, service.createOne);
+    this.router.patch("/:id", protect, service.updateOne);
+    this.router.delete("/:id", protect, service.deleteOne);
   }
 
   getRouter() {

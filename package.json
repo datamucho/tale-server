@@ -5,13 +5,14 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc && npm run copy-assets",
-    "copy-assets": "cp -r ./audio dist/audio",
+    "copy-assets": "cp -r ./audio dist/audio && cp -r ./ssl dist/ssl",
     "start": "node dist/server.js",
     "st": "npm run build && npm run start"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.7.2",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "crypto": "^1.0.1",
