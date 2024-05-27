@@ -93,9 +93,9 @@ class bookService extends serviceFactory<Document> {
     )}/books/payment/success`;
     const errorUrl = `${req.protocol}://${req.get("host")}/books/payment/error`;
 
-    const callback = `${req.protocol}://${req.get(
-      "host"
-    )}/books/payment/callback/${book._id}/${req.user.id}`;
+    const callback = `https://${req.get("host")}/books/payment/callback/${
+      book._id
+    }/${req.user.id}`;
     console.log({ callback });
 
     const proccedToPayment = await initiateBogPay(
