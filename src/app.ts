@@ -1,13 +1,14 @@
 import express from "express";
 import morgan from "morgan";
-import rateLimit from "express-rate-limit";
+// import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import mongoSanitize from "express-mongo-sanitize";
 import hpp from "hpp";
 import cookieParser from "cookie-parser";
 import globalErrorHandler from "./services/error.controller.js";
 import fs from "fs";
-import https from "https";
+// import https from "https";
+import http from "http";
 
 import AppError from "./utils/appError.js";
 import getEnv from "./utils/env.js";
@@ -126,11 +127,11 @@ app.all("*", (req, res, next) => {
 
 app.use(globalErrorHandler);
 
-const server = https.createServer(
-  {
-    key: fs.readFileSync(path.resolve(__dirname, "ssl/key.pem")),
-    cert: fs.readFileSync(path.resolve(__dirname, "ssl/cert.pem")),
-  },
+const server = http.createServer(
+  // {
+  //   key: fs.readFileSync(path.resolve(__dirname, "ssl/key.pem")),
+  //   cert: fs.readFileSync(path.resolve(__dirname, "ssl/cert.pem")),
+  // },
   app
 );
 
