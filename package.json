@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc && npm run copy-assets",
+    "build": "npx tsc && npm run copy-assets",
     "copy-assets": "cp -r ./audio dist/audio && cp -r ./ssl dist/ssl",
     "start": "node dist/server.js",
     "st": "npm run build && npm run start"
