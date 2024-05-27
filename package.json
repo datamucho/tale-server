@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "npm install typescript --save-dev && tsc && npm run copy-assets",
+    "build": "npm install typescript --save-dev && npx tsc && npm run copy-assets",
     "copy-assets": "cp -r ./audio dist/audio && cp -r ./ssl dist/ssl",
     "start": "node dist/server.js",
     "st": "npm run build && npm run start"
@@ -44,6 +44,6 @@
     "@types/nodemailer": "^6.4.14",
     "@types/validator": "^13.11.9",
     "@types/ws": "^8.5.10",
-    "typescript": "^5.3.3"
+    "typescript": "^5.4.5"
   }
 }
