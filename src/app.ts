@@ -7,8 +7,8 @@ import hpp from "hpp";
 import cookieParser from "cookie-parser";
 import globalErrorHandler from "./services/error.controller.js";
 import fs from "fs";
-import https from "https";
-// import http from "http";
+// import https from "https";
+import http from "http";
 
 import AppError from "./utils/appError.js";
 import getEnv from "./utils/env.js";
@@ -127,11 +127,11 @@ app.all("*", (req, res, next) => {
 
 app.use(globalErrorHandler);
 
-const server = https.createServer(
-  {
-    key: fs.readFileSync(path.resolve(__dirname, "ssl/key.pem")),
-    cert: fs.readFileSync(path.resolve(__dirname, "ssl/cert.pem")),
-  },
+const server = http.createServer(
+  // {
+  //   key: fs.readFileSync(path.resolve(__dirname, "ssl/key.pem")),
+  //   cert: fs.readFileSync(path.resolve(__dirname, "ssl/cert.pem")),
+  // },
   app
 );
 
