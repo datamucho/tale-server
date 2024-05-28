@@ -143,6 +143,29 @@ class bookService extends serviceFactory<Document> {
     }
   );
 
+  getMyBooks = catchAsync(
+    async (req: any, res: Response, next: NextFunction) => {
+      const books: Array<Document> = [];
+
+      console.log({ bids: req?.user?.books });
+
+      req?.user?.books?.forEach(async (bookId: string) => {
+        const book = await this.model.findById(bookId);
+        books.push(book);
+      });
+
+      const freeBooks = await this.model.find({ price: 0 });
+
+      freeBooks.forEach((book) => {
+        if (!req?.user?.books.includes(book._id)) {
+          books.push(book);
+        }
+      });
+
+      res.status(200).json({ data: books });
+    }
+  );
+
   handlePaymentError = (req: Request, res: Response, next: NextFunction) => {
     res.send(errorPage);
   };

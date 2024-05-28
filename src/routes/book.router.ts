@@ -10,6 +10,7 @@ class bookRouter extends routerFactory {
       this.service.uploadBook(),
       this.service.uploadAuthorBook
     );
+    this.router.get("/mybooks", protect, this.service.getMyBooks);
 
     this.router.post("/buy/:id", protect, this.service.buyBook);
     this.router.get(
