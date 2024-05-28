@@ -122,7 +122,6 @@ class bookService extends serviceFactory<Document> {
   handlePaymentCallback = catchAsync(
     async (req: any, res: Response, next: NextFunction) => {
       const book = await this.model.findById(req.params.bookId);
-      console.log("cb");
 
       if (!book) {
         return next(new AppError("No document found with that ID", 404));
@@ -134,35 +133,16 @@ class bookService extends serviceFactory<Document> {
         return next(new AppError("No user found with that ID", 404));
       }
 
+      if (user.books.includes(book._id)) {
+        return next(new AppError("You already have this book", 400));
+      }
+
       user.books.push(book._id);
 
       await user.save({ validateBeforeSave: false });
       console.log("200 cb");
 
       res.status(200).send({ success: true });
-    }
-  );
-
-  getMyBooks = catchAsync(
-    async (req: any, res: Response, next: NextFunction) => {
-      const books: Array<Document> = [];
-
-      console.log({ bids: req?.user?.books });
-
-      req?.user?.books?.forEach(async (bookId: string) => {
-        const book = await this.model.findById(bookId);
-        books.push(book);
-      });
-
-      const freeBooks = await this.model.find({ price: 0 });
-
-      freeBooks.forEach((book) => {
-        if (!req?.user?.books.includes(book._id)) {
-          books.push(book);
-        }
-      });
-
-      res.status(200).json({ data: books });
     }
   );
 
@@ -173,6 +153,29 @@ class bookService extends serviceFactory<Document> {
   handlePaymentSuccess = (req: Request, res: Response, next: NextFunction) => {
     res.send(successPage);
   };
+  getMyBooks = catchAsync(
+    async (req: any, res: Response, next: NextFunction) => {
+      const freeBooks = await this.model.find({ price: 0 });
+      const userBooks = await User.findById(req.user.id).populate("books");
+
+      if (!userBooks) {
+        return next(new AppError("No user found with that ID", 404));
+      }
+
+      let books = [...freeBooks, ...userBooks.books];
+      const bookIds = new Set(books.map((book) => book._id));
+
+      books = books.filter((book) => {
+        if (bookIds.has(book._id)) {
+          bookIds.delete(book._id);
+          return true;
+        }
+        return false;
+      });
+
+      res.status(200).json({ data: books });
+    }
+  );
 }
 
 export default new bookService();
