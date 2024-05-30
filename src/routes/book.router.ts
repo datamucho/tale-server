@@ -7,6 +7,7 @@ class bookRouter extends routerFactory {
     super(bookService);
     this.router.post(
       "/mine",
+      protect,
       this.service.uploadBook(),
       this.service.uploadAuthorBook
     );

@@ -14,7 +14,7 @@ const DB = getEnv("DB")
 
 mongoose.connect(DB).then(() => console.log("DB connection successful!"));
 
-const port = getEnv("PORT") || 3000;
+const port = getEnv("PORT") || 8080;
 const server = app.listen(port, () => {
   console.log(`App running on port ${port}...`);
 });

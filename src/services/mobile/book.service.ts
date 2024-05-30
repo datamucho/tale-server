@@ -56,12 +56,7 @@ class bookService extends serviceFactory<Document> {
         return next(new AppError("Error occured, while adding document!", 404));
       }
 
-      console.log(req.user);
-      console.log(req.user.id);
-
       const user = await User.findById(req.user.id);
-
-      console.log("USERRRR FOUNDED");
 
       if (!user) {
         return next(new AppError("No user found with that ID", 404));
