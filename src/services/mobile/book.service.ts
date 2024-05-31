@@ -15,15 +15,14 @@ const fileFilter = (req: Request, file: any, cb: any) => {
     file.mimetype === "audio/mp3" ||
     file.mimetype === "audio/mpeg" ||
     file.mimetype === "audio/x-m4a" ||
-    file.mimetype === "audio/m4a"
+    file.mimetype === "audio/m4a" ||
+    file.mimetype === "audio/mp4"
   ) {
     cb(null, true);
   } else {
     cb(new Error("Only .mp3 files are allowed!"), false);
   }
 };
-
-//    file.mimetype === "audio/m4a"
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
