@@ -11,19 +11,29 @@ import { successPage } from "../../pages";
 import { errorPage } from "../../pages/error.page";
 
 const fileFilter = (req: Request, file: any, cb: any) => {
-  if (file.mimetype === "audio/mp3" || file.mimetype === "audio/mpeg") {
+  if (
+    file.mimetype === "audio/mp3" ||
+    file.mimetype === "audio/mpeg" ||
+    file.mimetype === "audio/x-m4a" ||
+    file.mimetype === "audio/m4a"
+  ) {
     cb(null, true);
   } else {
     cb(new Error("Only .mp3 files are allowed!"), false);
   }
 };
 
+//    file.mimetype === "audio/m4a"
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "audio/");
   },
   filename: function (req, file, cb) {
-    cb(null, file.fieldname + "-" + Date.now() + ".mp3");
+    cb(
+      null,
+      file.fieldname + "-" + Date.now() + `.${file.mimetype.split("/")[1]}`
+    );
   },
 });
 

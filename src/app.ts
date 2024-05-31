@@ -70,7 +70,7 @@ app.get("/request-audio/:audioName", (req, res) => {
 
   const audioStream = fs.createReadStream(audioFilePath);
 
-  res.setHeader("Content-Type", "audio/mp3");
+  res.setHeader("Content-Type", `audio/${audioName.split(".").pop()}`);
 
   audioStream.pipe(res);
 
@@ -140,7 +140,6 @@ const wss = new WebSocketServer({ server, path: "/ws" });
 
 wss.on("connection", (ws: any) => {
   const streamAudioToWebSocket = (audioName: string) => {
-    console.log({ audioName });
     const audioFilePath = path.join(__dirname, "audio", audioName);
     if (!fs.existsSync(audioFilePath)) {
       console.log("Audio file not found");
