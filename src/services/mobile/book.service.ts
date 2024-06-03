@@ -159,25 +159,28 @@ class bookService extends serviceFactory<Document> {
   };
   getMyBooks = catchAsync(
     async (req: any, res: Response, next: NextFunction) => {
-      const freeBooks = await this.model.find({ price: 0 });
+      let freeBooks = await this.model.find({ price: 0 });
+      freeBooks = freeBooks.filter((book)=> book.category !== "author" && req.user.id !==  )
       const userBooks = await User.findById(req.user.id).populate("books");
 
       if (!userBooks) {
         return next(new AppError("No user found with that ID", 404));
       }
 
-      let books = [...freeBooks, ...userBooks.books];
-      const bookIds = new Set(books.map((book) => book._id));
+      // make books variable to be an union of freeBooks and userBooks without duplicates
+      const books = [...freeBooks, ...userBooks.books];
+      const freq:any = {};
 
-      books = books.filter((book) => {
-        if (bookIds.has(book._id)) {
-          bookIds.delete(book._id);
-          return true;
+      const booksFiltred: any = [];
+
+      books.forEach((book) => {
+        if (!freq[book._id]) {
+          freq[book._id] = true;
+          booksFiltred.push(book);
         }
-        return false;
       });
 
-      res.status(200).json({ data: books });
+      res.status(200).json({ data: booksFiltred });
     }
   );
 }
