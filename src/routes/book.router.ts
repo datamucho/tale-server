@@ -14,7 +14,7 @@ class bookRouter extends routerFactory {
     this.router.get("/buyed/my", protect, this.service.getMyBooks);
 
     this.router.post("/buy/:id", protect, this.service.buyBook);
-    this.router.get(
+    this.router.post(
       "/payment/callback/:bookId/:userId",
       this.service.handlePaymentCallback
     );
