@@ -300,3 +300,9 @@ export const verifyEmail = catchAsync(async (req: any, res: any, next: any) => {
     message: "Your email is verified!",
   });
 });
+
+export const checkValidToken = catchAsync(
+  async (req: any, res: any, next: any) => {
+    return res.status(200).json({ data: { valid: true } });
+  }
+);

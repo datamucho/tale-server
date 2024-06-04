@@ -18,6 +18,7 @@ router.use(authController.protect);
 
 const userController = new userService();
 
+router.get("/checkAuth", authController.checkValidToken);
 router.patch("/updateMyPassword", authController.updatePassword);
 router.get("/me", userController.getMe, userController.getOne);
 router.patch("/updateMe", userController.updateMe);
