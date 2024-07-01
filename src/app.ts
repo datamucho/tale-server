@@ -18,11 +18,12 @@ import bookRouter from "./routes/book.router.js";
 import { Server as WebSocketServer } from "ws";
 import { audioName as globalAudioName } from "./state.js";
 import path from "path";
-import { getBogAccessToken } from "./bog/getBogAccessToken.js";
+// Serve static files
 
 const app = express();
 // Set security HTTP headers
 app.use(helmet());
+app.use(express.static(path.join(__dirname, "public")));
 
 // Development logging
 if (getEnv("NODE_ENV") === "development") {
@@ -114,6 +115,19 @@ app.get("/radio-audio/:audioName", (req, res) => {
     res.writeHead(200, head);
     fs.createReadStream(audioFilePath).pipe(res);
   }
+});
+
+app.get("/admin", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "admin.html"));
+});
+
+app.get("/uploadAudio", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "upload-audio.html"));
+});
+
+// Add success route
+app.get("/success", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "success.html"));
 });
 
 // 3) ROUTES

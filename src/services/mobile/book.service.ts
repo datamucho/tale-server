@@ -79,6 +79,38 @@ class bookService extends serviceFactory<Document> {
     }
   );
 
+  uploadGeneralBook = catchAsync(
+    async (req: any, res: Response, next: NextFunction) => {
+      if (!req.file) {
+        return next(new AppError("Please upload an audio file", 400));
+      }
+
+      const book = await this.model.create({
+        name: req.body.name,
+        audio: req.file.filename,
+        price: req.body.price,
+        category: req.body.category,
+        photo: req.body.photo,
+      });
+
+      if (!book) {
+        return next(new AppError("Error occured, while adding document!", 404));
+      }
+
+      const user = await User.findById(req.user.id);
+
+      if (!user) {
+        return next(new AppError("No user found with that ID", 404));
+      }
+
+      user.books.push(book._id);
+
+      await user.save({ validateBeforeSave: false });
+
+      res.status(200).json({ data: book });
+    }
+  );
+
   buyBook = catchAsync(async (req: any, res: Response, next: NextFunction) => {
     const bogToken = await getBogAccessToken();
 
@@ -97,19 +129,16 @@ class bookService extends serviceFactory<Document> {
     )}/books/payment/success`;
     const errorUrl = `${req.protocol}://${req.get("host")}/books/payment/error`;
 
-    const callback = `https://${req.get("host")}/books/payment/callback/${
-      book._id
-    }/${req.user.id}`;
-    console.log({ callback });
+    const callback = `https://${req.get("host")}/books/payment/callback`;
 
     const proccedToPayment = await initiateBogPay(
       bogToken,
       book._id,
       req.user.id,
       book.price,
+      callback,
       successUrl,
-      errorUrl,
-      callback
+      errorUrl
     );
 
     if (!proccedToPayment) {
@@ -125,26 +154,28 @@ class bookService extends serviceFactory<Document> {
 
   handlePaymentCallback = catchAsync(
     async (req: any, res: Response, next: NextFunction) => {
-      const book = await this.model.findById(req.params.bookId);
+      console.log("wasssupiiiiiiii");
+      console.log(JSON.stringify(req.body));
+      // const book = await this.model.findById(req.params.bookId);
 
-      if (!book) {
-        return next(new AppError("No document found with that ID", 404));
-      }
+      // if (!book) {
+      //   return next(new AppError("No document found with that ID", 404));
+      // }
 
-      const user = await User.findById(req.params.userId);
+      // const user = await User.findById(req.params.userId);
 
-      if (!user) {
-        return next(new AppError("No user found with that ID", 404));
-      }
+      // if (!user) {
+      //   return next(new AppError("No user found with that ID", 404));
+      // }
 
-      if (user.books.includes(book._id)) {
-        return next(new AppError("You already have this book", 400));
-      }
+      // if (user.books.includes(book._id)) {
+      //   return next(new AppError("You already have this book", 400));
+      // }
 
-      user.books.push(book._id);
+      // user.books.push(book._id);
 
-      await user.save({ validateBeforeSave: false });
-      console.log("200 cb");
+      // await user.save({ validateBeforeSave: false });
+      // console.log("200 cb");
 
       res.status(200).send({ success: true });
     }

@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc && npm run copy-assets",
-    "copy-assets": "cp -r ./audio dist/audio && cp -r ./ssl dist/ssl",
+    "copy-assets": "cp -r ./audio dist/audio && cp -r ./ssl dist/ssl && cp -r ./views dist/views && cp -r ./public dist/public",
     "start": "node dist/server.js",
-    "st": "npm run build && npm run start"
+    "st": "rm -rf dist && npm run build && npm run start"
   },
   "author": "",
   "license": "ISC",

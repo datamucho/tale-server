@@ -1,4 +1,4 @@
-import { protect } from "../services/mobile/auth.service";
+import { protect, restrictTo } from "../services/mobile/auth.service";
 import bookService from "../services/mobile/book.service";
 import routerFactory from "./router.factory";
 
@@ -11,6 +11,14 @@ class bookRouter extends routerFactory {
       this.service.uploadBook(),
       this.service.uploadAuthorBook
     );
+    this.router.post(
+      "/upload",
+      protect,
+      restrictTo("admin"),
+      this.service.uploadBook(),
+      this.service.uploadGeneralBook
+    );
+
     this.router.get("/buyed/my", protect, this.service.getMyBooks);
 
     this.router.post("/buy/:id", protect, this.service.buyBook);

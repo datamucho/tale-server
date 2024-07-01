@@ -7,9 +7,9 @@ const initiateBogPay = async (
   pid: string,
   exid: string,
   price: number,
+  callbackUrl: string,
   successUrl: string,
-  errorUrl: string,
-  callbackUrl: string
+  errorUrl: string
 ): Promise<initiateBogPayResponse | void> => {
   let data = JSON.stringify({
     callback_url: callbackUrl,
