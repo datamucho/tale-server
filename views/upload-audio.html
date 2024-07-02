@@ -18,7 +18,11 @@
               <h4 class="card-title">Upload Book</h4>
             </div>
             <div class="card-body">
-              <form method="POST" enctype="multipart/form-data">
+              <form
+                method="POST"
+                enctype="multipart/form-data"
+                action="https://dolphin-app-dh42m.ondigitalocean.app/books/upload"
+              >
                 <div class="form-group">
                   <label for="name">Name:</label>
                   <input
@@ -84,6 +88,7 @@
         const protocol = window.location.protocol;
         const host = window.location.host;
         form.action = `${protocol}//${host}/books/upload`;
+        console.log(form.action);
       });
     </script>
 
