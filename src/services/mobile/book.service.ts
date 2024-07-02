@@ -26,7 +26,7 @@ const fileFilter = (req: Request, file: any, cb: any) => {
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "audio/");
+    cb(null, "dist/audio/");
   },
   filename: function (req, file, cb) {
     cb(
