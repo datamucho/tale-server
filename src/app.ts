@@ -62,8 +62,12 @@ app.use("/audio", express.static(path.join(__dirname, "audio")));
 const audioDirectory = path.join(__dirname, "audio");
 
 app.get("/request-audio/:audioName", (req, res) => {
+  console.log("heyooooo");
   const audioName = req.params.audioName;
+  console.log({ audioName });
+  console.log({ audioDirectory });
   const audioFilePath = path.join(audioDirectory, audioName);
+  console.log({ audioFilePath });
 
   if (!fs.existsSync(audioFilePath)) {
     return res.status(404).send("Audio file not found");
