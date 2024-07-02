@@ -13,8 +13,6 @@ class bookRouter extends routerFactory {
     );
     this.router.post(
       "/upload",
-      protect,
-      restrictTo("admin"),
       this.service.uploadBook(),
       this.service.uploadGeneralBook
     );

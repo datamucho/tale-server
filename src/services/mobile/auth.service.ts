@@ -67,26 +67,6 @@ export const login = catchAsync(async (req: any, res: any, next: any) => {
   createSendToken(user, 200, res);
 });
 
-export const adminLogin = catchAsync(async (req: any, res: any, next: any) => {
-  const { email, password } = req.body;
-
-  if (!email || !password) {
-    return next(new AppError("Please provide email and password!", 400));
-  }
-
-  const user = await User.findOne({ email }).select("+password");
-
-  if (!user || !(await user.correctPassword(password, user.password))) {
-    return next(new AppError("Incorrect email or password", 401));
-  }
-
-  if (user.role !== "admin") {
-    return next(new AppError("You are not admin", 401));
-  }
-
-  createSendToken(user, 200, res);
-});
-
 export const logout = (req: any, res: any) => {
   res.cookie("jwt", "loggedout", {
     expires: new Date(Date.now() + 10 * 1000),
@@ -326,5 +306,3 @@ export const checkValidToken = catchAsync(
     return res.status(200).json({ data: { valid: true } });
   }
 );
-
-export const uploadAudio = catchAsync((req, res, next) => {});

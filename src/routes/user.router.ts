@@ -8,8 +8,6 @@ const router = express.Router();
 // Adding route handlers with assumed types from authController and userService
 router.post("/signup", authController.signup);
 router.post("/login", authController.login);
-router.post("/adminLogin", authController.adminLogin);
-router.post("/uploadAudio", authController.uploadAudio);
 
 router.get("/logout", authController.logout);
 

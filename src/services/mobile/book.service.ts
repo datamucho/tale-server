@@ -81,9 +81,13 @@ class bookService extends serviceFactory<Document> {
 
   uploadGeneralBook = catchAsync(
     async (req: any, res: Response, next: NextFunction) => {
+      console.log("you");
+      console.log(req);
       if (!req.file) {
         return next(new AppError("Please upload an audio file", 400));
       }
+
+      console.log("damn");
 
       const book = await this.model.create({
         name: req.body.name,
@@ -96,16 +100,6 @@ class bookService extends serviceFactory<Document> {
       if (!book) {
         return next(new AppError("Error occured, while adding document!", 404));
       }
-
-      const user = await User.findById(req.user.id);
-
-      if (!user) {
-        return next(new AppError("No user found with that ID", 404));
-      }
-
-      user.books.push(book._id);
-
-      await user.save({ validateBeforeSave: false });
 
       res.status(200).json({ data: book });
     }
@@ -210,6 +204,38 @@ class bookService extends serviceFactory<Document> {
       });
 
       res.status(200).json({ data: books });
+    }
+  );
+
+  uploadBookGeneral = catchAsync(
+    async (req: any, res: Response, next: NextFunction) => {
+      if (!req.file) {
+        return next(new AppError("Please upload an audio file", 400));
+      }
+
+      const book = await this.model.create({
+        name: req.body.name,
+        audio: req.file.filename,
+        price: req.body.price,
+        category: req.body.category,
+        photo: req.body.photo,
+      });
+
+      if (!book) {
+        return next(new AppError("Error occured, while adding document!", 404));
+      }
+
+      const user = await User.findById(req.user.id);
+
+      if (!user) {
+        return next(new AppError("No user found with that ID", 404));
+      }
+
+      user.books.push(book._id);
+
+      await user.save({ validateBeforeSave: false });
+
+      res.status(200).json({ data: book });
     }
   );
 }
