@@ -60,6 +60,8 @@ class bookService extends serviceFactory<Document> {
 
       const book = await this.model.create({
         name: req.body.name,
+        nameGe: "",
+        nameRu: "",
         audio: req.file.filename,
         duration,
         price: 0,
@@ -97,6 +99,8 @@ class bookService extends serviceFactory<Document> {
 
       const book = await this.model.create({
         name: req.body.name,
+        nameGe: "",
+        nameRu: "",
         audio: req.file.filename,
         price: req.body.price,
         category: req.body.category,
