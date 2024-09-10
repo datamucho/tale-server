@@ -7,10 +7,19 @@ const bookSchema = new Schema<IBook>({
     type: String,
     required: [true, "Please tell us your name!"],
   },
+  nameGe: {
+    type: String,
+  },
+  nameRu: {
+    type: String,
+  },
   audio: {
     type: String,
     required: [true, "Please provide your audio"],
     unique: true,
+  },
+  duration: {
+    type: Number,
   },
   photo: {
     type: String,

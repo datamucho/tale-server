@@ -9,6 +9,7 @@ import { getBogAccessToken, initiateBogPay } from "../../bog";
 import { initiateBogPayResponse } from "../../types/bog.types";
 import { successPage } from "../../pages";
 import { errorPage } from "../../pages/error.page";
+import { getVideoDurationInSeconds } from "get-video-duration";
 
 const fileFilter = (req: Request, file: any, cb: any) => {
   if (
@@ -53,9 +54,14 @@ class bookService extends serviceFactory<Document> {
         return next(new AppError("Please upload an audio file", 400));
       }
 
+      const duration = await getVideoDurationInSeconds(
+        `dist/audio/${req.file.filename}`
+      );
+
       const book = await this.model.create({
         name: req.body.name,
         audio: req.file.filename,
+        duration,
         price: 0,
         category: "author",
         photo: "https://picsum.photos/200/200",
@@ -81,13 +87,13 @@ class bookService extends serviceFactory<Document> {
 
   uploadGeneralBook = catchAsync(
     async (req: any, res: Response, next: NextFunction) => {
-      console.log("you");
-      console.log(req);
       if (!req.file) {
         return next(new AppError("Please upload an audio file", 400));
       }
 
-      console.log("damn");
+      const duration = await getVideoDurationInSeconds(
+        `dist/audio/${req.file.filename}`
+      );
 
       const book = await this.model.create({
         name: req.body.name,
@@ -95,6 +101,7 @@ class bookService extends serviceFactory<Document> {
         price: req.body.price,
         category: req.body.category,
         photo: req.body.photo,
+        duration,
       });
 
       if (!book) {

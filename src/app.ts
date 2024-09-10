@@ -61,6 +61,22 @@ app.use("/audio", express.static(path.join(__dirname, "audio")));
 
 const audioDirectory = path.join(__dirname, "audio");
 
+// const formatAudioPath = (path: string) => {
+//   if (path.endsWith("dist")) {
+//     return path;
+//   }
+
+//   if (path.endsWith("dist/")) {
+//     return path;
+//   }
+
+//   if (path.endsWith("/")) {
+//     return path + "dist/";
+//   }
+
+//   return path + "/dist/";
+// };
+
 app.get("/request-audio/:audioName", (req, res) => {
   console.log("heyooooo");
   const audioName = req.params.audioName;
