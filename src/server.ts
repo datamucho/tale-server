@@ -16,39 +16,39 @@ const DB = getEnv("DB")
 
 mongoose.connect(DB).then(async () => {
   console.log("DB connection successful!");
-  const books = await Book.find();
+  // const books = await Book.find();
 
-  books.forEach(async (book) => {
-    try {
-      let modified = false;
+  // books.forEach(async (book) => {
+  //   try {
+  //     let modified = false;
 
-      if (!book.nameGe) {
-        book.nameGe = book.name;
+  //     if (!book.nameGe) {
+  //       book.nameGe = book.name;
 
-        modified = true;
-      }
+  //       modified = true;
+  //     }
 
-      if (!book.nameRu) {
-        book.nameRu = book.name;
+  //     if (!book.nameRu) {
+  //       book.nameRu = book.name;
 
-        modified = true;
-      }
+  //       modified = true;
+  //     }
 
-      if (!book.duration) {
-        book.duration = await getVideoDurationInSeconds(
-          `dist/audio/${book.audio}`
-        );
+  //     if (!book.duration) {
+  //       book.duration = await getVideoDurationInSeconds(
+  //         `dist/audio/${book.audio}`
+  //       );
 
-        modified = true;
-      }
+  //       modified = true;
+  //     }
 
-      if (modified) {
-        await book.save();
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  });
+  //     if (modified) {
+  //       await book.save();
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // });
 });
 
 const port = getEnv("PORT") || 8080;
