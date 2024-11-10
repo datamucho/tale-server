@@ -194,7 +194,7 @@ async function createApp() {
     }
   });
 
-  app.get("/admin", (req, res) => {
+  app.get("/uploadAudioAdmin", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "admin.html"));
   });
 
