@@ -2,6 +2,10 @@ import mongoose, { Schema } from "mongoose";
 import { IBox } from "../types";
 
 const BoxSchema = new Schema<IBox>({
+  boxId: {
+    type: String,
+    required: true,
+  },
   connectedTo: {
     type: Schema.Types.ObjectId,
     ref: "User",
