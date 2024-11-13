@@ -1,5 +1,5 @@
-# Use the official Node.js 16 image as a parent image
-FROM node:16
+# Update to Node.js 18
+FROM node:18-alpine
 
 # Set the working directory in the container
 WORKDIR /app
@@ -22,6 +22,10 @@ COPY ssl /app/dist/ssl
 
 # Expose port 8080
 EXPOSE 8080
+
+# Optional: Add healthcheck
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD node -e "require('http').get('http://localhost:8080/health', (r) => r.statusCode === 200 ? process.exit(0) : process.exit(1))"
 
 # Define the command to run your app
 CMD ["node", "dist/server.js"]
