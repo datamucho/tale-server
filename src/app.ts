@@ -84,19 +84,25 @@ async function createApp() {
 
   // Add authentication to admin panel
   const ADMIN = {
-    email: process.env.ADMIN_EMAIL || "admin@example.com",
-    password: process.env.ADMIN_PASSWORD || "password",
+    email: getEnv("ADMIN_EMAIL"),
+    password: getEnv("ADMIN_PASSWORD"),
   };
 
   const router = AdminJSExpress.buildAuthenticatedRouter(adminJs, {
     authenticate: async (email, password) => {
-      if (email === ADMIN.email && password === ADMIN.password) {
+      if (!email || !password) return null;
+
+      // Use constant-time comparison to prevent timing attacks
+      const emailMatch = email === ADMIN.email;
+      const passwordMatch = password === ADMIN.password;
+
+      if (emailMatch && passwordMatch) {
         return ADMIN;
       }
       return null;
     },
     cookieName: "adminjs",
-    cookiePassword: process.env.ADMIN_COOKIE_SECRET || "session-key",
+    cookiePassword: getEnv("ADMIN_COOKIE_SECRET"),
   });
 
   app.use(adminJs.options.rootPath, router);

@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=development
+      - DB=${DB}
+      - DB_NAME=${DB_NAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRES_IN=${JWT_EXPIRES_IN}
+      - PORT=${PORT}
+      - BOG_USERNAME=${BOG_USERNAME}
+      - BOG_PASSWORD=${BOG_PASSWORD}
+      - ADMIN_EMAIL=${ADMIN_EMAIL}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - ADMIN_COOKIE_SECRET=${ADMIN_COOKIE_SECRET}
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
